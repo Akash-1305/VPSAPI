@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Product;
@@ -37,6 +38,15 @@ public class ProductController {
 	@GetMapping("/GetAllProducts")
 	public ResponseEntity<?> getAllProducts() {
 		return new ResponseEntity<>(productRepo.findAll(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/GetProducts")
+	public ResponseEntity<?> getProducts(@RequestParam(required = false) String availability) {
+	    if ("Out of Stock".equals(availability)) {
+	        return null;
+	    } else {
+	        return new ResponseEntity<>(productRepo.findByAvailability("In Stock"), HttpStatus.OK);
+	    }
 	}
 
 	@DeleteMapping("/DeleteProducts/{id}")
